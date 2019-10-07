@@ -1,0 +1,49 @@
+class Image
+ def initialize(image)
+  @image = image 
+ end
+
+ def find_ones
+  ones = []
+  @image.each_with_index do |row, index_row|
+    row.each_with_index do |col, index_col |
+      if col == 1
+        ones << [index_row, index_col]
+      end
+    end
+  end
+  ones
+ end
+ 
+  def blur!
+    ones = find_ones
+    
+    ones.each do |coords|
+      target_row =  coords[0]
+      target_col = coords[1]
+      @image[target_row -1 ][target_col] = 1 unless target_row == 0
+      @image[target_row][target_col +1] = 1 unless target_col >= 3
+      @image[target_row +1][target_col] = 1 unless target_row >= 3
+      @image[target_row][target_col -1] = 1 unless target_col == 0
+    end
+  end
+
+  def output_image
+    @image.each do |line|
+      puts line.join
+    end
+  end
+   
+end
+ 
+
+image = Image.new([
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 0, 0, 0],
+  [0, 1, 0, 0]
+])
+
+
+image.blur!
+image.output_image
